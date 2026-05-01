@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glams for Clams — Graphic Design Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 60px;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e8d5b7;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #aaa;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #e8d5b7;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(232, 213, 183, 0.03) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: #e8d5b7;
+            margin-bottom: 10px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 50px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Create Section */
+        .create-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .create-btn {
+            background: linear-gradient(135deg, #e8d5b7 0%, #c9a96e 100%);
+            color: #0a0a0a;
+            border: none;
+            padding: 20px 70px;
+            font-size: 1.2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 4px 30px rgba(232, 213, 183, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 40px rgba(232, 213, 183, 0.35);
+        }
+
+        .create-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .order-counter {
+            font-size: 1.1rem;
+            color: #555;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .order-counter.active {
+            color: #e8d5b7;
+            font-weight: 700;
+        }
+
+        .contact-btn {
+            background-color: transparent;
+            color: #e8d5b7;
+            border: 2px solid rgba(232, 213, 183, 0.3);
+            padding: 14px 45px;
+            font-size: 0.95rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .contact-btn:hover {
+            background-color: rgba(232, 213, 183, 0.1);
+            border-color: #e8d5b7;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background-color: #141414;
+            padding: 50px;
+            border-radius: 24px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideIn 0.4s ease-out;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: #f0f0f0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(201, 169, 110, 0.1) 0%, rgba(201, 169, 110, 0.05) 100%);
+            border-left: 4px solid #c9a96e;
+            padding: 18px;
+            margin-bottom: 30px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .warning-box p {
+            color: #e8d5b7;
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #ccc;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: rgba(255,255,255,0.03);
+            color: #f0f0f0;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #c9a96e;
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e8d5b7' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+        }
+
+        .form-group select option {
+            background-color: #141414;
+            color: #f0f0f0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #e8d5b7 0%, #c9a96e 100%);
+            color: #0a0a0a;
+            border: none;
+            padding: 16px;
+            font-size: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(232, 213, 183, 0.3);
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background-color: rgba(255,255,255,0.05);
+            color: #888;
+            border: 2px solid rgba(255,255,255,0.08);
+            padding: 16px;
+            font-size: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background-color: rgba(255,255,255,0.08);
+            color: #ccc;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .success-message h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .success-message p {
+            color: #aaa;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+
+        .success-message p strong {
+            color: #e8d5b7;
+        }
+
+        .continue-btn {
+            background: linear-gradient(135deg, #e8d5b7 0%, #c9a96e 100%);
+            color: #0a0a0a;
+            border: none;
+            padding: 16px 60px;
+            font-size: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(232, 213, 183, 0.3);
+        }
+
+        /* Contact Page */
+        .contact-page {
+            display: none;
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .contact-page.active {
+            display: block;
+        }
+
+        .contact-page h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+
+        .contact-page .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        .contact-form-box {
+            background-color: #141414;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .contact-form-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #f0f0f0;
+        }
+
+        .contact-form-box .form-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form-box .form-group label {
+            font-size: 0.8rem;
+        }
+
+        .contact-form-box .submit-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .back-home-btn {
+            display: block;
+            margin: 40px auto 0;
+            background-color: transparent;
+            color: #e8d5b7;
+            border: 2px solid rgba(232, 213, 183, 0.3);
+            padding: 14px 45px;
+            font-size: 0.95rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .back-home-btn:hover {
+            background-color: rgba(232, 213, 183, 0.1);
+            border-color: #e8d5b7;
+        }
+
+        /* Portfolio Section */
+        .portfolio-section {
+            padding: 80px 60px;
+            background-color: #0f0f0f;
+        }
+
+        .portfolio-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+
+        .portfolio-section .section-desc {
+            text-align: center;
+            color: #888;
+            margin-bottom: 50px;
+            font-size: 1.05rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .portfolio-item {
+            background-color: #141414;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            border-color: rgba(232, 213, 183, 0.2);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .portfolio-item .placeholder {
+            height: 220px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #222 50%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-item .placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(232, 213, 183, 0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .portfolio-item .info {
+            padding: 25px;
+        }
+
+        .portfolio-item .tag {
+            display: inline-block;
+            background: rgba(232, 213, 183, 0.1);
+            color: #e8d5b7;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .portfolio-item h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            color: #f0f0f0;
+        }
+
+        .portfolio-item p {
+            color: #777;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Services Strip */
+        .services-strip {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 50px 20px;
+            background-color: #141414;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            flex-wrap: wrap;
+        }
+
+        .service-item {
+            text-align: center;
+        }
+
+        .service-item .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .service-item h4 {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background-color: #0a0a0a;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer .logo {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #e8d5b7;
+        }
+
+        footer p {
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 25px;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .portfolio-section {
+                padding: 60px 25px;
+            }
+            .modal {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Glams for Clams</div>
+        <div class="nav-links">
+            <a onclick="showHome()">Home</a>
+            <a onclick="showContact()">Contact Me</a>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="subtitle">Graphic Design Studio</div>
+            <h1>Glams for Clams</h1>
+            <p>Bold visuals. Timeless branding. We turn your ideas into stunning graphic designs.</p>
+
+            <div class="create-section">
+                <button class="create-btn" id="createBtn" onclick="openModal()">🎨 Create</button>
+                <div class="order-counter" id="orderCounter"></div>
+                <button class="contact-btn" onclick="showContact()">Contact Me</button>
+            </div>
+        </div>
+
+        <!-- Services Strip -->
+        <div class="services-strip">
+            <div class="service-item">
+                <div class="icon">🎨</div>
+                <h4>Logo Design</h4>
+            </div>
+            <div class="service-item">
+                <div class="icon">📱</div>
+                <h4>Social Media</h4>
+            </div>
+            <div class="service-item">
+                <div class="icon">📦</div>
+                <h4>Packaging</h4>
+            </div>
+            <div class="service-item">
+                <div class="icon">📄</div>
+                <h4>Print Design</h4>
+            </div>
+            <div class="service-item">
+                <div class="icon">🌐</div>
+                <h4>Web Graphics</h4>
+            </div>
+        </div>
+
+        <!-- Portfolio Section -->
+        <div class="portfolio-section" id="portfolio">
+            <h2>Our Work</h2>
+            <p class="section-desc">A showcase of our latest graphic design projects</p>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="placeholder">🎯</div>
+                    <div class="info">
+                        <span class="tag">Branding</span>
+                        <h3>Luxe Cosmetics Rebrand</h3>
+                        <p>Complete brand identity overhaul including logo, color palette, and packaging design.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="placeholder">📱</div>
+                    <div class="info">
+                        <span class="tag">Social Media</span>
+                        <h3>Cafe Bloom Instagram</h3>
+                        <p>Monthly content calendar and custom graphics for a trendy local coffee shop.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="placeholder">📦</div>
+                    <div class="info">
+                        <span class="tag">Packaging</span>
+                        <h3>Artisan Chocolate Box</h3>
+                        <p>Elegant packaging design for a premium handmade chocolate collection.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="placeholder">📄</div>
+                    <div class="info">
+                        <span class="tag">Print</span>
+                        <h3>Minimalist Magazine</h3>
+                        <p>Editorial layout design for an independent fashion and culture magazine.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="placeholder">🌐</div>
+                    <div class="info">
+                        <span class="tag">Web</span>
+                        <h3>Tech Startup UI Kit</h3>
+                        <p>Custom web graphics, icons, and hero illustrations for a SaaS platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div class="contact-page" id="contact-page">
+        <h2>Get in Touch</h2>
+        <p class="subtitle">Have a question or need a custom quote? Send me a message!</p>
+
+        <div class="contact-form-box">
+            <h3>Send a Message</h3>
+            <div class="form-group">
+                <label for="msgName">Your Name</label>
+                <input type="text" id="msgName" placeholder="Jane Doe">
+            </div>
+            <div class="form-group">
+                <label for="msgEmail">Your Email</label>
+                <input type="email" id="msgEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="msgSubject">Subject</label>
+                <input type="text" id="msgSubject" placeholder="e.g., Custom Quote Request">
+            </div>
+            <div class="form-group">
+                <label for="msgBody">Your Message</label>
+                <textarea id="msgBody" placeholder="Tell me what you need..."></textarea>
+            </div>
+            <button class="submit-btn" onclick="sendMessage()">Send Message</button>
+        </div>
+
+        <button class="back-home-btn" onclick="showHome()">← Back to Home</button>
+    </div>
+
+    <!-- Create Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="createModal">
+            <!-- Form View -->
+            <div id="formView">
+                <h2>Request a Graphic Design</h2>
+
+                <div class="warning-box">
+                    <p>⚠️ Warning: Only 3 designs can be ordered per week!</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="designType">Design Type</label>
+                    <select id="designType">
+                        <option value="">Select a design type...</option>
+                        <option value="logo">Logo Design</option>
+                        <option value="social">Social Media Graphics</option>
+                        <option value="packaging">Packaging Design</option>
+                        <option value="print">Print Design (Flyers, Posters, Business Cards)</option>
+                        <option value="web">Web Graphics / UI Elements</option>
+                        <option value="branding">Full Brand Identity</option>
+                        <option value="illustration">Custom Illustration</option>
+                        <option value="other">Other (describe below)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="designName">Project Name</label>
+                    <input type="text" id="designName" placeholder="e.g., 'Sunrise Coffee Rebrand'">
+                </div>
+
+                <div class="form-group">
+                    <label for="designDesc">Describe Your Design Vision</label>
+                    <textarea id="designDesc" placeholder="Tell us about your project — style preferences, color ideas, target audience, brand vibe, any inspiration references..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerEmail">Your Email</label>
+                    <input type="email" id="customerEmail" placeholder="your@email.com">
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="submit-btn" onclick="submitOrder()">Place Order</button>
+                    <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Success View -->
+            <div class="success-message" id="successView">
+                <div class="success-icon">👑</div>
+                <h3>Your order is placed!</h3>
+                <p>The queen will get back to you by the end of the week.<br>If not, go to the <strong>Contact Me</strong> page!</p>
+                <button class="continue-btn" onclick="continueHome()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">Glams for Clams</div>
+        <p>© 2026 Glams for Clams. Graphic Design Studio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize order count from localStorage
+        let orderCount = parseInt(localStorage.getItem('glamsOrderCount')) || 0;
+        const MAX_ORDERS = 3;
+
+        function updateCounter() {
+            const counter = document.getElementById('orderCounter');
+            const createBtn = document.getElementById('createBtn');
+
+            if (orderCount > 0) {
+                counter.textContent = `${orderCount}/${MAX_ORDERS} designs ordered this week`;
+                counter.classList.add('active');
+            } else {
+                counter.textContent = '';
+                counter.classList.remove('active');
+            }
+
+            if (orderCount >= MAX_ORDERS) {
+                createBtn.disabled = true;
+                createBtn.textContent = '🚫 Max Orders Reached';
+            } else {
+                createBtn.disabled = false;
+                createBtn.textContent = '🎨 Create';
+            }
+        }
+
+        // Initialize on load
+        updateCounter();
+
+        function openModal() {
+            if (orderCount >= MAX_ORDERS) {
+                alert('You have reached the maximum of 3 graphic designs per week! Please contact us for special requests.');
+                return;
+            }
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('formView').classList.remove('hidden');
+            document.getElementById('successView').classList.remove('active');
+            // Reset form
+            document.getElementById('designType').value = '';
+            document.getElementById('designName').value = '';
+            document.getElementById('designDesc').value = '';
+            document.getElementById('customerEmail').value = '';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function submitOrder() {
+            const type = document.getElementById('designType').value;
+            const name = document.getElementById('designName').value.trim();
+            const desc = document.getElementById('designDesc').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+
+            if (!type) {
+                alert('Please select a design type!');
+                return;
+            }
+            if (!name || !desc || !email) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            if (orderCount >= MAX_ORDERS) {
+                alert('Maximum orders reached!');
+                return;
+            }
+
+            // Increment order count
+            orderCount++;
+            localStorage.setItem('glamsOrderCount', orderCount);
+
+            // Show success message
+            document.getElementById('formView').classList.add('hidden');
+            document.getElementById('successView').classList.add('active');
+        }
+
+        function continueHome() {
+            closeModal();
+            showHome();
+            updateCounter();
+        }
+
+        function showHome() {
+            document.getElementById('home-page').classList.remove('hidden');
+            document.getElementById('contact-page').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showContact() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('contact-page').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function sendMessage() {
+            const name = document.getElementById('msgName').value.trim();
+            const email = document.getElementById('msgEmail').value.trim();
+            const subject = document.getElementById('msgSubject').value.trim();
+            const body = document.getElementById('msgBody').value.trim();
+
+            if (!name || !email || !subject || !body) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            alert("Thanks for sharing! I will get back to u :)");
+
+            // Reset form
+            document.getElementById('msgName').value = '';
+            document.getElementById('msgEmail').value = '';
+            document.getElementById('msgSubject').value = '';
+            document.getElementById('msgBody').value = '';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
